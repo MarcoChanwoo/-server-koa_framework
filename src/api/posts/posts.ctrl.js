@@ -51,7 +51,7 @@ DELETE /api/posts/:id
 exports.remove = (ctx) => {
   const { id } = ctx.params;
   // 해당 id를 가진 post가 몇번째인지 확인함
-  const index = posts.findIndex(p.id.toString() === id);
+  const index = posts.findIndex((p) => p.id.toString() === id);
   // 포스트가 없으면 오류를 반환함
   if (index === -1) {
     ctx.status = 404;
@@ -63,4 +63,30 @@ exports.remove = (ctx) => {
   // index번째 아이템을 제거함
   posts.splice(index, 1);
   ctx.status = 204; // No content
+};
+
+/* 포스트 수정(교체)
+PUT /api/posts/:id
+{title, body}
+*/
+exports.replace = (ctx) => {
+  // PUT 메서드는 전체 포스트 정보를 입력하여 데이터를 통째로 교체할 때 사용함
+  const { id } = ctx.params;
+  // 해당 id를 가진 post가 몇번째인지 확인함
+  const index = posts.findIndex((p) => p.id.toString() === id);
+  // 포스트가 없으면 오류를 반환함
+  if (index === -1) {
+    ctx.status = 404;
+    ctx.body = {
+      message: '포스트가 존재하지 않습니다.',
+    };
+    return;
+  }
+  // 전체 객체를 덮어 씌움
+  // 따라서 id를 제외한 기존 정보를 날리고, 객체를 새로 만듦.
+  posts[index] = {
+    id,
+    ...ctx.request.body,
+  };
+  ctx.body = posts[index];
 };
