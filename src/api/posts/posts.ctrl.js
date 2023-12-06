@@ -65,7 +65,31 @@ export const remove = async (ctx) => {
   }
 };
 
-export const update = (ctx) => {};
+/* 데이터 수정
+  PATCH /api/posts/:id
+  {
+    title: '수정',
+    body: '수정할 내용 입력',
+    tags: ['수정', '태그']
+  }
+*/
+export const update = async (ctx) => {
+  const { id } = ctx.params;
+  try {
+    const post = await Post.findByIdAndUpdate(id, ctx.request.body, {
+      new: true,
+      // true: 이 값을 설정하면 업데이트된 데이터를 반환함
+      // false: 업데이트 되기 전의 데이터를 반환함
+    }).exec();
+    if (!post) {
+      ctx.status = 404;
+      return;
+    }
+    ctx.body = post;
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
 
 // let postId = 1; // id의 초기값
 
