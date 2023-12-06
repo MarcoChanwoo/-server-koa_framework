@@ -15,10 +15,17 @@ const posts = new Router();
 
 posts.get('/', postsCtrl.list);
 posts.post('/', postsCtrl.write);
-posts.get('/:id', postsCtrl.checkObjectId, postsCtrl.read);
-posts.delete('/:id', postsCtrl.checkObjectId, postsCtrl.remove);
-// posts.put('/:id', postsCtrl.replace); // 구현하지 않을 것이므로 제거함
-posts.patch('/:id', postsCtrl.checkObjectId, postsCtrl.update);
+// posts.get('/:id', postsCtrl.checkObjectId, postsCtrl.read);
+// posts.delete('/:id', postsCtrl.checkObjectId, postsCtrl.remove);
+// // posts.put('/:id', postsCtrl.replace); // 구현하지 않을 것이므로 제거함
+// posts.patch('/:id', postsCtrl.checkObjectId, postsCtrl.update);
+
+const post = new Router(); // /api/posts/:id
+post.get('/', postsCtrl.read);
+post.delete('/', postsCtrl.remove);
+post.patch('/', postsCtrl.update);
+
+posts.use('/:id', postsCtrl.checkObjectId, post.routes());
 
 export default posts;
 // module.exports = posts;
