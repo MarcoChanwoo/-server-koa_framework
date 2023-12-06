@@ -26,7 +26,7 @@ export const write = async (ctx) => {
     // 객체가 다음 필드를 갖고 있음을 검증
     title: Joi.string().required(), // required()가 있다면 필수 항목
     body: Joi.string().required(),
-    tags: Joi.array().item(Joi.string().required()), // 문자열로 이뤄진 배열
+    tags: Joi.array().items(Joi.string().required()), // 문자열로 이뤄진 배열
   });
 
   // 검증하고 나서 김증 실패인 경우 에러처리
