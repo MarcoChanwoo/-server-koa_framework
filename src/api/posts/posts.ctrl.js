@@ -23,7 +23,7 @@ export const write = async (ctx) => {
   }
 };
 
-/*
+/* 데이터 조회 - 전체 데이터
   GET /api/posts
 */
 export const list = async (ctx) => {
@@ -35,7 +35,22 @@ export const list = async (ctx) => {
   }
 };
 
-export const read = (ctx) => {};
+/* 특정 포스트 조회
+  GET /api/posts/:id
+*/
+export const read = async (ctx) => {
+  const { id } = ctx.params;
+  try {
+    const post = await Post.findById(id).exec();
+    if (!post) {
+      ctx.status = 404; // Not found
+      return;
+    }
+    ctx.body = post;
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
 
 export const remove = (ctx) => {};
 
