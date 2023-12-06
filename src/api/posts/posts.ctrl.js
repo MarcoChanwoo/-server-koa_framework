@@ -1,5 +1,6 @@
 import Post from '../../models/post';
 import mongoose from 'mongoose';
+import Joi from 'joi';
 
 const { ObjectId } = mongoose.Types;
 
@@ -21,6 +22,21 @@ export const checkObjectId = (ctx, next) => {
   }
 */
 export const write = async (ctx) => {
+  const schema = Joi.object().keys({
+    // 객체가 다음 필드를 갖고 있음을 검증
+    title: Joi.string().required(), // required()가 있다면 필수 항목
+    body: Joi.string().required(),
+    tags: Joi.array().item(Joi.string().required()), // 문자열로 이뤄진 배열
+  });
+
+  // 검증하고 나서 김증 실패인 경우 에러처리
+  const result = schema.validate(ctx.request.body);
+  if (result.error) {
+    ctx.status = 400; // Bad request
+    ctx.body = result.error;
+    return;
+  }
+
   const { title, body, tags } = ctx.request.body;
   const post = new Post({
     title,
