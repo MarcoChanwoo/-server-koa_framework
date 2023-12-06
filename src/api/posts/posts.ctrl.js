@@ -52,7 +52,18 @@ export const read = async (ctx) => {
   }
 };
 
-export const remove = (ctx) => {};
+/* 데이터 삭제
+  DELETE /api/posts/:id
+*/
+export const remove = async (ctx) => {
+  const { id } = ctx.params;
+  try {
+    await Post.findByIdAndRemove(id).exec();
+    ctx.status = 204; // No content(성공은 했으나 응답할 데이터가 없을 시)
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
 
 export const update = (ctx) => {};
 
