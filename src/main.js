@@ -18,6 +18,7 @@ mongoose
   .connect(MONGO_URI)
   .then(() => {
     console.log('Connected to MongoDB');
+    createFakeData();
   })
   .catch((e) => {
     console.error(e);
