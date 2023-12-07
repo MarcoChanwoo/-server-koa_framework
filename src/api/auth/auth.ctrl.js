@@ -37,10 +37,12 @@ export const register = async (ctx) => {
     await user.setPassword(password); // 비밀번호 설정
     await user.save(); // 데이터베이스에 저장
 
+    ctx.body = user.serialize();
+
     // 응답할 데이터에서 hashedPassword 필드 제거
-    const data = user.toJSON();
-    delete data.hashedPassword;
-    ctx.body = data;
+    // const data = user.toJSON();
+    // delete data.hashedPassword;
+    // ctx.body = data;
   } catch (e) {
     ctx.throw(500, e);
   }
